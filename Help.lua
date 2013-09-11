@@ -1,3 +1,12 @@
+--[[########################################################################
+#	 																	| Help |																								#
+#  											 | Concept and Code By Centauri Soldier |																	#
+#													  |||>>>|| VERSION 0.2 ||<<<|||																		#
+#													  																															#
+#		This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.							#
+#		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
+#		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.		#
+#########################################################################]]
 Help = {};
 local tTopics = {};
 require "AAA"
@@ -370,12 +379,13 @@ return false
 end
 
 
+
 function Help.Vacuum()
 	
 	for sTopic, tTopic in pairs(tTopics) do
 	local sParent	 = tTopic.Parent;
 		
-		--check the make the parent exists
+		--check the make sure the parent exists
 		if not tTopics[sParent] then
 		tTopics[sTopic].Parent = "";
 		end
