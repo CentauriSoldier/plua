@@ -349,9 +349,9 @@ end
 
 
 function math.len(nInput, bIncludeDecimalPoint)
-local sInput = tostring(sInput);
+local sInput = tostring(nInput);
 	
-	if bIncludeDecimalPoint then
+	if not bIncludeDecimalPoint then
 	sInput = string.gsub(sInput, ".", "");
 	end
 	
@@ -411,10 +411,9 @@ end
 
 
 function math.range(tInput)
-nN = #tInput;
 table.sort(tInput, true);
 
-return tInput[nN] - tInput[1]
+return tInput[#tInput] - tInput[1]
 end
 
 
