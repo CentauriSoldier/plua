@@ -7,9 +7,20 @@
 #		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
 #		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.		#
 #########################################################################]]
+require "AAA";
+
 Help = {};
 local tTopics = {};
-require "AAA"
+local tDefault = {
+	Categories = {},
+	Children = {},			
+	Desc = "",	
+	ImageData = "",
+	ImagePath = "",
+	Keywords = {},
+	Parent = "",
+};
+
 
 --Assumes that the topic exists
 local function ConfigureNewParent(sTopic, sParent)
@@ -17,16 +28,9 @@ local function ConfigureNewParent(sTopic, sParent)
 	if string.gsub(sParent, " ", "") ~= "" then
 
 		if not tTopics[sParent] then
-		tTopics[sParent] = {
-			Children = {
-				[1] = sTopic,
-			},			
-			Desc = "",	
-			ImageData = "",
-			ImagePath = "",
-			Parent = "",	
-		};
-		
+		CloneDefaultTable(tTopics[sParent]);
+		tTopics[sParent].Children[1] = sTopic;
+				
 		else
 	
 		--check to see if the topic is a child of the parent already
@@ -53,10 +57,97 @@ local function ConfigureNewParent(sTopic, sParent)
 end
 
 
+--assumes that the input is a table
+local function CloneDefaultTable(tTargetTable)
+	
+	for sIndex, vVal in pairs(tDefault) do
+	tTargetTable[sIndex] = vVal;
+	end
+
+end
+
+
+--assumes the values input are correct types
+local function ProcessValue(tTable, sIndex, vValue)
+local sDefaultType = type(tDefault[sIndex]);
+local sValueType = type(vValue);
+local sDefaultValue = true;
+	
+	--return the imagedata directly if it exists
+	if sIndex == "ImageData" then
+		
+		if sValueType == "userdata" then		
+		tTable[sIndex] = vValue;
+		return true
+		end
+	
+	tTable[sIndex] = "";
+	return true
+	end
+	
+	--get the default value
+	if sDefaultType == "boolean" then
+	sDefaultValue = false;
+	
+	elseif sDefaultType == "number" then
+	sDefaultValue = -1;
+		
+	elseif sDefaultType == "string" then
+	sDefaultValue = "";
+	
+	elseif sDefaultType == "table" then
+	sDefaultValue = {};	
+	
+	end
+		
+	--process the input
+	if sValueType ~= sDefaultType then
+	tTable[sIndex] =  sDefaultValue;
+	return true
+	
+	else
+		
+		if sValueType == "string" then
+			
+			if string.gsub(vValue, " ", "") == "" then
+			tTable[sIndex] = sDefaultValue;
+			return true
+			
+			else
+			tTable[sIndex] = vValue;
+			return true
+			
+			end
+					
+		elseif sValueType == "table" then
+		local tRet = {};
+		
+			for nIndex, sValue in pairs(vValue) do	
+				
+				if type(sValue) == "string" then
+				tRet[#tRet + 1] = sValue;
+				end
+				
+			end
+			
+		tTable[sIndex] =  tRet;
+		return true
+		
+		else
+		tTable[sIndex] = vValue;
+		return true
+		
+		end	
+	
+	end
+
+return false
+end
+
 
 function Help.Test()
-Help.AddTopic("Test","","This is a topic.");
-Help.AddTopic("Sub Topic","Test","This is a sub-topic.");
+Help.AddTopic("Test", "", "This is a topic.");
+Help.AddTopic("Sub Topic" ,"Test", "This is a sub-topic.");
 Help.Export("exported.lua");
 end
 
@@ -67,32 +158,100 @@ end
 -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 function Help.AddTopic(...)
-AAA.CheckNumArgs(arg, 3);
+AAA.CheckNumArgs(arg, 1);
 local sTopic = AAA.CheckTypes(arg,1,{"string"});
-local sParent = AAA.CheckTypes(arg,2,{"string"});
-local sDesc = AAA.CheckTypes(arg,3,{"string"});
-local vImagePath = AAA.CheckTypes(arg,4,{"string","nil"});
-local vImageData = AAA.CheckTypes(arg,5,{"userdata","nil"});
+local sParent = AAA.CheckTypes(arg,2,{"string","nil"});
+local sDesc = AAA.CheckTypes(arg,3,{"string","nil"});
+local tCategories = AAA.CheckTypes(arg,4,{"table","nil"});
+local tKeywords = AAA.CheckTypes(arg,5,{"table","nil"});
+local tChildren = AAA.CheckTypes(arg,6,{"table","nil"});
+local sImagePath = AAA.CheckTypes(arg,7,{"string","nil"});
+local uImageData = AAA.CheckTypes(arg,8,{"userdata","nil"});
+
+
 	
 	if not tTopics[sTopic] then
-	tTopics[sTopic] = {
-		Children = {},
-		Desc = sDesc,
-		ImageData = "",
-		ImagePath = "",		
-		Parent = sParent,
-	};
+	tTopics[sTopic] = {};
+	CloneDefaultTable(tTopics[sTopic]);
+		
+		ProcessValue(tTopics[sTopic], "Parent", sParent);
+		ProcessValue(tTopics[sTopic], "Desc", sDesc);
+		ProcessValue(tTopics[sTopic], "Categories", tCategories);
+		ProcessValue(tTopics[sTopic], "Keywords", tKeywords);
+		ProcessValue(tTopics[sTopic], "Children", tChildren);
+		ProcessValue(tTopics[sTopic], "ImagePath", sImagePath);
+		ProcessValue(tTopics[sTopic], "ImageData", uImageData);
+		
+		
+				
+		--[[
+		--categories
+		if type(tCategories) == "table" then
 			
-		if type(vImagePath) == "string" then
-		tTopics[sTopic].ImagePath = vImagePath;
+			for nIndex, sCategory in pairs(tCategories) do
+				
+				if type(sCategory) == "string" then
+				tTopics[sTopic].Categories[#tTopics[sTopic].Categories + 1] = sCategory;
+				end
+				
+			end
+		
 		end
 		
-		if type(vImageData) == "userdata" then
-		tTopics[sTopic].ImageData = vImageData;
+		--children
+		if type(tChildren) == "table" then
+			
+			for nIndex, sChild in pairs(tChildren) do
+				
+				if type(sChild) == "string" then
+				tTopics[sTopic].Children[#tTopics[sTopic].Children + 1] = sChild;
+				end
+				
+			end
+		
 		end
 		
+		--description
+		if type(sDesc) == "string" then
+		tTopics[sTopic].Desc = sDesc;
+		end
+		
+		--imagepath
+		if type(sImagePath) == "string" then
+		tTopics[sTopic].ImagePath = sImagePath;
+		end
+		
+		--imagedata
+		if type(uImageData) == "userdata" then
+		tTopics[sTopic].ImageData = uImageData;
+		end
+		
+		--keywords
+		if type(tKeywords) == "table" then
+			
+			for nIndex, sKeyword in pairs(tKeywords) do
+				
+				if type(sKeyword) == "string" then
+				tTopics[sTopic].Keyword[#tTopics[sTopic].Keyword + 1] = sKeyword;
+				end
+				
+			end
+		
+		end
+		
+		--parent
+		if not type(sParent) == "string" then
+		sParent = "";
+		end
+		
+		if string.gsub(sParent, " ", "") == "" then
+		sParent = "";		
+		end
+		
+		tTopics[sTopic].Parent = sParent;
+		]]
 		--if the parent table doesn't exist then create that too
-		ConfigureNewParent(sTopic, sParent);
+		ConfigureNewParent(sTopic, tTopics[sTopic].Parent);
 
 	end
 
@@ -141,6 +300,17 @@ end
 
 
 
+function Help.GetCategories(sTopic)
+
+	if tTopics[sTopic] then
+	return tTopics[sTopic].Categories
+	end
+
+return {}
+end
+
+
+
 function Help.GetChildCount(...)
 AAA.CheckNumArgs(arg, 1);
 local sTopic = AAA.CheckTypes(arg,1,{"string"});
@@ -178,6 +348,17 @@ end
 
 
 
+function Help.GetKeywords(sTopic)
+
+	if tTopics[sTopic] then
+	return tTopics[sTopic].Keywords
+	end
+
+return {}
+end
+
+
+
 function Help.GetParent(sTopic)
 
 	if tTopics[sTopic] then
@@ -185,6 +366,34 @@ function Help.GetParent(sTopic)
 	end
 
 return ""
+end
+
+
+
+function Help.GetTopicCount()
+return #tTopics
+end
+
+
+
+function Help.GetTopicNames()
+local tNames
+	
+	for nIndex, sTopic in pairs(tTopics) do
+	tNames[#tNames + 1] = sTopic;
+	end
+	
+	if type(tNames) == "table" then
+	table.sort(tNames, true);
+	end
+	
+return tNames
+end
+
+
+
+function Help.GetTopics()
+return tTopics
 end
 
 
@@ -227,22 +436,32 @@ local bOk, hFile = pcall(io.open, pFile, "rb");
 										
 										else
 										--create the topic if it does not exist
-										tTopics[sTopic] = {
-											Children = {},
-											Desc = "",
-											ImageData = "",
-											ImagePath = "",									
-											Parent = "",
-										};
+										tTopics[sTopic] = {};
+										CloneDefaultTable(tTopics[sTopic]);
 										
 										end
 										
 										if (bTopicExists and bImportExisting) or (not bTopicExists) then
+										local tMyCategories = {};
 										local tChildren = {};
-											
+										local tKeywords = {};
+										
 											--clear the child table if the merge option was not enabled
 											if not bMerge then
 											tTopics[sTopic].Children = {};
+											end
+											
+											--import categories
+											if type(tTopic.Categories) == "table" then
+												
+												for nIndex, sCategory in pairs(tTopic.Categories) do
+													
+													if type(sCategory) == "string" then
+													tTopics[sTopic].Categories[#tTopics[sTopic].Categories + 1] = sCategory;
+													end
+													
+												end
+												
 											end
 											
 											--import children
@@ -266,6 +485,19 @@ local bOk, hFile = pcall(io.open, pFile, "rb");
 											--import image path
 											if type(tTopic.ImagePath) == "string" then
 											tTopics[sTopic].ImagePath = tTopic.ImagePath;
+											end
+											
+											--import keywords
+											if type(tTopic.Keywords) == "table" then
+												
+												for nIndex, sKeyword in pairs(tTopic.Keywords) do
+													
+													if type(sKeyword) == "string" then
+													tTopics[sTopic].Keywords[#tTopics[sTopic].Keywords + 1] = sKeyword;
+													end
+													
+												end
+												
 											end
 											
 											--import parent
@@ -379,6 +611,8 @@ return false
 end
 
 
+
+--consider auto-tag for links in this function. It could search for keywords, categories etc and create links according to user-defined start and end tags
 
 function Help.Vacuum()
 	
