@@ -3,6 +3,35 @@
 #  											 | Concept and Code By Centauri Soldier |																	#
 #													  |||>>>|| VERSION 0.2 ||<<<|||																		#
 #													  																															#
+#	This module is designed to allow the programmer to create a dynamic help system that is both robust and simple	#
+#	to use. Help topics can use categories and keywords. They may have parent and children topics for ease of			#
+#	reference. 																																							#
+#													  																															#
+#													  																															#
+#													  																															#
+Example of the topic structure (you won't see or interact with this table directly; this is just for reference)					#
+#													  																															#
+#	tTopics = {																																							#
+#		["My 1st Topic"] = {																																			#
+#			Categories = {},																																			#
+#			Children = {"My 2nd Topic"},																														#
+#			Desc = "I can put keywords in here and search the topics more quickly using that method.",							#
+#			ImageData = "",																																			#
+#			ImagePath = "",																																			#
+#			Keywords = {"fast","keywords"},																													#
+#			Parent = "",																																					#
+#		},																																										#
+#		["My 2nd Topic"] = {																																		#
+#			Categories = {},																																			#
+#			Children = {},																																				#
+#			Desc = "Here's a description of my second topic. See how I'm a child of 'My 1st Topic', isn't that cool?",			#
+#			ImageData = "",																																			#
+#			ImagePath = "",																																			#
+#			Keywords = {"showoff"},																																#
+#			Parent = "My 1st Topic",																																#
+#		},																																										#
+#	};																																											#
+#													  																															#
 #		This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.							#
 #		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
 #		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.		#
@@ -11,7 +40,15 @@ require "AAA";
 
 Help = {};
 local tTopics = {};
-local tDefault = {
+
+
+
+--[[
+DO NOT MOVE THIS FUNCTION
+It must remain above all other functions.
+]]
+local function GetDefaultTable()
+return {
 	Categories = {},
 	Children = {},			
 	Desc = "",	
@@ -19,7 +56,9 @@ local tDefault = {
 	ImagePath = "",
 	Keywords = {},
 	Parent = "",
-};
+}
+end
+
 
 
 --Assumes that the topic exists
@@ -28,9 +67,10 @@ local function ConfigureNewParent(sTopic, sParent)
 	if string.gsub(sParent, " ", "") ~= "" then
 
 		if not tTopics[sParent] then
+		tTopics[sParent] = {};
 		CloneDefaultTable(tTopics[sParent]);
 		tTopics[sParent].Children[1] = sTopic;
-				
+		
 		else
 	
 		--check to see if the topic is a child of the parent already
@@ -46,7 +86,7 @@ local function ConfigureNewParent(sTopic, sParent)
 			end
 			
 			--if it's not, make it one
-			if not bExists then
+			if not bExists then			
 			tTopics[sParent].Children[#tTopics[sParent].Children + 1] = sTopic;
 			end
 			
@@ -57,8 +97,10 @@ local function ConfigureNewParent(sTopic, sParent)
 end
 
 
+
 --assumes that the input is a table
 local function CloneDefaultTable(tTargetTable)
+local tDefault = GetDefaultTable();
 	
 	for sIndex, vVal in pairs(tDefault) do
 	tTargetTable[sIndex] = vVal;
@@ -67,8 +109,10 @@ local function CloneDefaultTable(tTargetTable)
 end
 
 
+
 --assumes the values input are correct types
 local function ProcessValue(tTable, sIndex, vValue)
+local tDefault = GetDefaultTable();
 local sDefaultType = type(tDefault[sIndex]);
 local sValueType = type(vValue);
 local sDefaultValue = true;
@@ -120,17 +164,20 @@ local sDefaultValue = true;
 			end
 					
 		elseif sValueType == "table" then
-		local tRet = {};
-		
+			
+			if not tTable[sIndex] then
+			tTable[sIndex] = {};
+			end
+			
 			for nIndex, sValue in pairs(vValue) do	
 				
 				if type(sValue) == "string" then
-				tRet[#tRet + 1] = sValue;
+				tTable[sIndex][nIndex] =  sValue;
 				end
 				
 			end
 			
-		tTable[sIndex] =  tRet;
+			
 		return true
 		
 		else
@@ -145,14 +192,91 @@ return false
 end
 
 
-function Help.Test()
-Help.AddTopic("Test", "", "This is a topic.");
-Help.AddTopic("Sub Topic" ,"Test", "This is a sub-topic.");
+
+--[[
+DO NOT MOVE THIS FUNCTION
+It must remain below all other local functions.
+]]
+local function ImportString(sInput)
+_HELP_TempTable = -1;
+bOk, fGetTable = pcall(loadstring, "_HELP_TempTable = "..sInput);
+
+	if bOk then
+	
+		if type(fGetTable) == "function" then
+		bOk = pcall(fGetTable);
+			
+			if bOk then
+				
+				if type(_HELP_TempTable) == "table" then
+				
+					for sTopic, tTopic in pairs(_HELP_TempTable) do
+						
+						if type(sTopic) == "string" then
+							
+							if string.gsub(sTopic, " ", "") ~= "" then
+							local bTopicExists = false;
+								
+								--check if the topic already exists in the main table
+								if tTopics[sTopic] then
+								bTopicExists = true;
+								
+								else
+								--create the topic if it does not exist
+								tTopics[sTopic] = {};
+								CloneDefaultTable(tTopics[sTopic]);
+								
+								end
+								
+								if (bTopicExists and bImportExisting) or (not bTopicExists) then
+									
+									--clear the child table if the merge option was not enabled
+									if not bMerge then
+									tTopics[sTopic].Categories = {};
+									tTopics[sTopic].Children = {};
+									tTopics[sTopic].Keywords = {};
+									end
+									
+									ProcessValue(tTopics[sTopic], "Categories", tTopic.Categories);
+									ProcessValue(tTopics[sTopic], "Children", tTopic.Children);
+									ProcessValue(tTopics[sTopic], "Desc", tTopic.Desc);
+									ProcessValue(tTopics[sTopic], "ImagePath", tTopic.ImagePath);
+									ProcessValue(tTopics[sTopic], "Keywords", tTopic.Keywords);
+									ProcessValue(tTopics[sTopic], "Parent", tTopic.Parent);
+									
+								end
+								
+							end
+							
+						end
+						
+					end
+				
+				--memory clean up
+				_HELP_TempTable = nil;
+				
+				--clean the topic table and delete bad references
+				Help.Vacuum();
+				end
+				
+			end
+			
+		end
+		
+	end
+
+end
+
+
+
+function e()
+Help.AddTopic("Test", "", "This is a topic.", {"Test Function","First Items"});
+Help.AddTopic("Sub Topic" ,"Test", "This is a sub-topic.", nil, {"poop","junk","dumb"});
 Help.Export("exported.lua");
 end
 
-function Help.Test2()
-Help.Import("exported.lua");
+function i()
+Help.ImportFile("exported.lua");
 Help.Export("exported2.lua");
 end
 -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -164,11 +288,8 @@ local sParent = AAA.CheckTypes(arg,2,{"string","nil"});
 local sDesc = AAA.CheckTypes(arg,3,{"string","nil"});
 local tCategories = AAA.CheckTypes(arg,4,{"table","nil"});
 local tKeywords = AAA.CheckTypes(arg,5,{"table","nil"});
-local tChildren = AAA.CheckTypes(arg,6,{"table","nil"});
-local sImagePath = AAA.CheckTypes(arg,7,{"string","nil"});
-local uImageData = AAA.CheckTypes(arg,8,{"userdata","nil"});
-
-
+local sImagePath = AAA.CheckTypes(arg,6,{"string","nil"});
+local uImageData = AAA.CheckTypes(arg,7,{"userdata","nil"});
 	
 	if not tTopics[sTopic] then
 	tTopics[sTopic] = {};
@@ -178,83 +299,14 @@ local uImageData = AAA.CheckTypes(arg,8,{"userdata","nil"});
 		ProcessValue(tTopics[sTopic], "Desc", sDesc);
 		ProcessValue(tTopics[sTopic], "Categories", tCategories);
 		ProcessValue(tTopics[sTopic], "Keywords", tKeywords);
-		ProcessValue(tTopics[sTopic], "Children", tChildren);
 		ProcessValue(tTopics[sTopic], "ImagePath", sImagePath);
 		ProcessValue(tTopics[sTopic], "ImageData", uImageData);
 		
-		
-				
-		--[[
-		--categories
-		if type(tCategories) == "table" then
-			
-			for nIndex, sCategory in pairs(tCategories) do
-				
-				if type(sCategory) == "string" then
-				tTopics[sTopic].Categories[#tTopics[sTopic].Categories + 1] = sCategory;
-				end
-				
-			end
-		
-		end
-		
-		--children
-		if type(tChildren) == "table" then
-			
-			for nIndex, sChild in pairs(tChildren) do
-				
-				if type(sChild) == "string" then
-				tTopics[sTopic].Children[#tTopics[sTopic].Children + 1] = sChild;
-				end
-				
-			end
-		
-		end
-		
-		--description
-		if type(sDesc) == "string" then
-		tTopics[sTopic].Desc = sDesc;
-		end
-		
-		--imagepath
-		if type(sImagePath) == "string" then
-		tTopics[sTopic].ImagePath = sImagePath;
-		end
-		
-		--imagedata
-		if type(uImageData) == "userdata" then
-		tTopics[sTopic].ImageData = uImageData;
-		end
-		
-		--keywords
-		if type(tKeywords) == "table" then
-			
-			for nIndex, sKeyword in pairs(tKeywords) do
-				
-				if type(sKeyword) == "string" then
-				tTopics[sTopic].Keyword[#tTopics[sTopic].Keyword + 1] = sKeyword;
-				end
-				
-			end
-		
-		end
-		
-		--parent
-		if not type(sParent) == "string" then
-		sParent = "";
-		end
-		
-		if string.gsub(sParent, " ", "") == "" then
-		sParent = "";		
-		end
-		
-		tTopics[sTopic].Parent = sParent;
-		]]
 		--if the parent table doesn't exist then create that too
-		ConfigureNewParent(sTopic, tTopics[sTopic].Parent);
+		ConfigureNewParent(sTopic, sParent);
 
 	end
-
+		
 end
 
 
@@ -265,26 +317,12 @@ local pFile = AAA.CheckTypes(arg,1,{"string"});
 local bOk, hFile = pcall(io.open, pFile, "wb");
 	
 	if bOk and hFile then
-	local sContents = "local tHelp = "..table.tostring(tTopics, 0).."\r\n\r\nreturn tHelp";
-	hFile:write(sContents);
+	hFile:write(table.tostring(tTopics, 0));
 	hFile:close();
 	return true
 	end
 	
 return false
-end
-
-
-
-function Help.GetChildren(...)
-AAA.CheckNumArgs(arg, 1);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
-
-	if tTopics[sTopic] then
-	return tTopics[sTopic].Children
-	end	
-	
-return {}
 end
 
 
@@ -307,6 +345,30 @@ function Help.GetCategories(sTopic)
 	end
 
 return {}
+end
+
+
+
+function Help.GetCategoryCount(sTopic)
+
+	if tTopics[sTopic] then
+	return #tTopics[sTopic].Categories
+	end
+
+return {}
+end
+
+
+
+function Help.GetChildren(...)
+AAA.CheckNumArgs(arg, 1);
+local sTopic = AAA.CheckTypes(arg,1,{"string"});
+
+	if tTopics[sTopic] then
+	return tTopics[sTopic].Children
+	end	
+	
+return -1
 end
 
 
@@ -398,7 +460,7 @@ end
 
 
 
-function Help.Import(...)
+function Help.ImportFile(...)
 AAA.CheckNumArgs(arg, 1);
 local pFile = AAA.CheckTypes(arg,1,{"string"});
 local bImportExisting = AAA.CheckTypes(arg,2,{"boolean","nil"});
@@ -411,128 +473,51 @@ local bOk, hFile = pcall(io.open, pFile, "rb");
 	hFile:close();
 	
 		if bOk then
-		_HELP_TempTable = -1;
-		bOk, fGetTable = pcall(loadstring, "_HELP_TempTable = "..sContents);
-			
-			if bOk then
-				
-				if type(fGetTable) == "function" then
-				bOk = pcall(fGetTable);
-					
-					if bOk then
-						
-						if type(_HELP_TempTable) == "table" then
-						
-							for sTopic, tTopic in pairs(_HELP_TempTable) do
-								
-								if type(sTopic) == "string" then
-									
-									if string.gsub(sTopic, " ", "") ~= "" then
-									local bTopicExists = false;
-										
-										--check if the topic already exists in the main table
-										if tTopics[sTopic] then
-										bTopicExists = true;
-										
-										else
-										--create the topic if it does not exist
-										tTopics[sTopic] = {};
-										CloneDefaultTable(tTopics[sTopic]);
-										
-										end
-										
-										if (bTopicExists and bImportExisting) or (not bTopicExists) then
-										local tMyCategories = {};
-										local tChildren = {};
-										local tKeywords = {};
-										
-											--clear the child table if the merge option was not enabled
-											if not bMerge then
-											tTopics[sTopic].Children = {};
-											end
-											
-											--import categories
-											if type(tTopic.Categories) == "table" then
-												
-												for nIndex, sCategory in pairs(tTopic.Categories) do
-													
-													if type(sCategory) == "string" then
-													tTopics[sTopic].Categories[#tTopics[sTopic].Categories + 1] = sCategory;
-													end
-													
-												end
-												
-											end
-											
-											--import children
-											if type(tTopic.Children) == "table" then
-												
-												for nIndex, sChild in pairs(tTopic.Children) do
-													
-													if type(sChild) == "string" then
-													tChildren[#tChildren + 1] = sChild;
-													end
-													
-												end
-												
-											end
-											
-											--import description
-											if type(tTopic.Desc) == "string" then
-											tTopics[sTopic].Desc = tTopic.Desc;
-											end
-											
-											--import image path
-											if type(tTopic.ImagePath) == "string" then
-											tTopics[sTopic].ImagePath = tTopic.ImagePath;
-											end
-											
-											--import keywords
-											if type(tTopic.Keywords) == "table" then
-												
-												for nIndex, sKeyword in pairs(tTopic.Keywords) do
-													
-													if type(sKeyword) == "string" then
-													tTopics[sTopic].Keywords[#tTopics[sTopic].Keywords + 1] = sKeyword;
-													end
-													
-												end
-												
-											end
-											
-											--import parent
-											if type(tTopic.Parent) == "string" then	
-												
-												--check to make sure the parent is or will be in the main topics table
-												if tTopics[tTopic.Parent] or _HELP_TempTable[tTopic.Parent] then
-												tTopics[sTopic].Parent = tTopic.Parent;
-												end
-												
-											end
-										
-										--clean the topic table and delete bad references
-										Help.Vacuum();
-										end
-										
-									end
-									
-								end
-								
-							end
-						
-						_HELP_TempTable = nil;
-						end
-						
-					end
-					
-				end
-				
-			end
-		
+		return ImportString(sContents, bImportExisting, bMerge);
 		end
 		
 	end
 	
+return false
+end
+
+
+
+function Help.ImportString()
+AAA.CheckNumArgs(arg, 1);
+local sString = AAA.CheckTypes(arg,1,{"string"});
+local bImportExisting = AAA.CheckTypes(arg,2,{"boolean","nil"});
+local bMerge = AAA.CheckTypes(arg,3,{"boolean","nil"});
+return ImportString(sString, bImportExisting, bMerge);
+end
+
+
+
+function Help.ImportTable(...)
+AAA.CheckNumArgs(arg, 1);
+local tTable = AAA.CheckTypes(arg,1,{"table"});
+local bImportExisting = AAA.CheckTypes(arg,2,{"boolean","nil"});
+local bMerge = AAA.CheckTypes(arg,3,{"boolean","nil"});
+return ImportString(table.tostring(tTable, 0), bImportExisting, bMerge);
+end
+
+
+
+function Help.SetCategories(...)
+AAA.CheckNumArgs(arg, 2);
+local sTopic = AAA.CheckTypes(arg,1,{"string"});
+local tCategories = AAA.CheckTypes(arg,2,{"table"});
+
+	if tTopics[sTopic] then	
+	tTopics[sTopic].Categories = {};
+	
+		for nIndex, sCategory in pairs(tCategories) do
+		tTopics[sTopic].Categories[#tTopics[sTopic].Categories + 1] = sCategory;
+		end
+		
+	return true
+	end
+
 return false
 end
 
@@ -560,6 +545,26 @@ local pImagePath = AAA.CheckTypes(arg,2,{"string"});
 
 	if tTopics[sTopic] then
 	tTopics[sTopic].ImagePath = pImagePath;
+	return true
+	end
+
+return false
+end
+
+
+
+function Help.SetKeywords(...)
+AAA.CheckNumArgs(arg, 2);
+local sTopic = AAA.CheckTypes(arg,1,{"string"});
+local tKeywords = AAA.CheckTypes(arg,2,{"table"});
+
+	if tTopics[sTopic] then	
+	tTopics[sTopic].Keywords = {};
+	
+		for nIndex, sKeyword in pairs(tKeywords) do
+		tTopics[sTopic].Keywords[#tTopics[sTopic].Keywords + 1] = sKeyword;
+		end
+		
 	return true
 	end
 
@@ -612,8 +617,6 @@ end
 
 
 
---consider auto-tag for links in this function. It could search for keywords, categories etc and create links according to user-defined start and end tags
-
 function Help.Vacuum()
 	
 	for sTopic, tTopic in pairs(tTopics) do
@@ -628,8 +631,8 @@ function Help.Vacuum()
 		local tValidEntries = {};
 		for nIndex, sChild in pairs(tTopics[sTopic].Children) do
 			
-			if tTopics[sChild] then
-			tValidEntries[#tValidEntries+ 1] = sChild;
+			if tTopics[sChild] and sChild ~= sTopic then
+			tValidEntries[#tValidEntries + 1] = sChild;
 			end
 			
 		end
