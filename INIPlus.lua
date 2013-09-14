@@ -8,39 +8,6 @@
 #		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
 #		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.			#
 #########################################################################]]
-
---[[Description
-<p>INIPlus implements a human-readable file format using combined features of INI and XML.<br/>
-With custom parsing, INIPlus lifts INI file length limits and combines the versatility of XML and the simplicity of INI. </p>
-]]
---[[Features
-<ul class="comments_list_features">
-	<li>Allows the setting of section and value attributes</li>
-	<li>Quick enumeration of sections, values and their attributes</li>
-	<li>Allows for multiline values</li>
-	<li>Auto-saves changes to file</li>
-	<li>Toggle error messages display On/Off</li>
-</ul>
-]]
---[[Version History
-<p><b>Version 1.2.2.0</b></p>
-<p>Fixed a typo in INIPlus.SetSectionAttrubute() that was causing a bug.</p>
-<br/>
-<p><b>Version 1.2.1.0</b></p>
-<p>Completed missed sections of 8.0 update.</p>
-<br/>
-<p><b>Version 1.2.0.0</b></p>
-<p>Updated to be compatible with AMS 8.0.</p>
-<p>Updated the IRLua Plugin Helper Functions to v2.6.</p>
-<br/>
-<p><b>Version 1.1.0.0</b></p>
-<p>Fixed a bug that occurred when the INIPlus.ValueExists() function targeted a section that did not exist.</p>
-<br/>
-]]
---[[Planned Features
-<p><b>Features</b></p>
-<p>Create a system that toggles auto-save for increased processing speed with large files.</p>
-]]
 require "AAA"
 INIPlus = {};
 local tINIPlus = {
@@ -49,36 +16,6 @@ local tINIPlus = {
 };
 local INIPLUS_ERRORS_ON = false;
 local INIPLUS_ESCAPE_CHAR = "^";
-
---[[ 
-
-===== INIPlus Symbols  =====
-
-[Section"SectionAttribute"]
-|Value'Value Attribute'=<Data>
-Comments - Comments can be placed anywhere in the file provided that they are outside the escapable character sections
-
-Escapable Characters
-[ ] | = " ' < >
-
-
-===== INIPlus Table Structure =====
-[nFileIndex] = {
-	Data = {
-		["My Section"] = {
-			Attribute = "Some Attribute",
-			Values = {
-				["My Value"] = {
-					Attribute = "Some Other Attribute",
-					Data = "Put Data Here",
-				},
-			},
-		},
-	},
-	ID = 0,
-	Path = "",
-}
-]]
 
 --====================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 -- <BEGIN HIDDEN FUNCTIONS> 
