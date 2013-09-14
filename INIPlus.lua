@@ -1,13 +1,13 @@
---[[########################################################################
-#	 																	| INIPlus |																			#
-#  											 | Concept and Code By Centauri Soldier |															#
-#  									  | http://www.github.com/CentauriSoldier/LuaPlugs |													#
-#													  |||>>>|| VERSION 3.2 ||<<<|||																#
-#													  																											#
-#		This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.								#
-#		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
-#		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.			#
-#########################################################################]]
+--[[
+> INIPlus
+> Concept and Code By Centauri Soldier
+> http://www.github.com/CentauriSoldier/LuaPlugs
+> Version 3.6
+>
+> This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
+> To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/
+> or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+--]]
 require "AAA"
 INIPlus = {};
 local tINIPlus = {
