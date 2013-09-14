@@ -1,3 +1,13 @@
+--[[########################################################################
+#	 																	| string |																				#
+#  											 | Concept and Code By Centauri Soldier |															#
+#  									  | http://www.github.com/CentauriSoldier/LuaPlugs |													#
+#													  |||>>>|| VERSION 2.3 ||<<<|||																#
+#													  																											#
+#		This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.								#
+#		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
+#		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.			#
+#########################################################################]]
 local tString = {
 	Articles = {};
 
@@ -128,8 +138,9 @@ end
 
 
 
-function string.uuid(sInputPrefix, nMaxLength)
+function string.uuid(sInputPrefix, )
 local tChars = {"7","f","1","e","3","c","6","b","5","9","a","4","8","d","0","2"};
+local nChars = #tChars;
 local sPrefix = "";
 local sUUID = "";
 local tSequence = {1,4,4,4,12};
@@ -175,7 +186,7 @@ local sDelimiter = "-";
 	for nIndex, nSequence in pairs(tSequence) do
 		
 		for x = 1, nSequence do
-		sUUID = sUUID..tChars[math.random(1, 36)];
+		sUUID = sUUID..tChars[math.random(1, nChars)];
 		end
 
 	sUUID = sUUID.."-";

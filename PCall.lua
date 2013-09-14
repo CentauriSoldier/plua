@@ -1,19 +1,13 @@
---[[
-Code by Centauri Soldier
-www.AMSPublic.com
-CentauriSoldier@AMSPublic.com
-
-License (Creative Commons)
-Attribution-ShareAlike 3.0 Unported
-http://creativecommons.org/licenses/by-sa/3.0/
-
-Version Hsitory
-1.0.1.0
-Added the ability to auto-refresh when adding or removing items
-
-1.0.2.0
-Fixed a bug that disallowed adding and removing a PCall item multiple times.
-]]
+--[[########################################################################
+#	 																	| PCall |																				#
+#  											 | Concept and Code By Centauri Soldier |															#
+#  									  | http://www.github.com/CentauriSoldier/LuaPlugs |													#
+#													  |||>>>|| VERSION 1.2 ||<<<|||																#
+#													  																											#
+#		This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.								#
+#		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
+#		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.			#
+#########################################################################]]
 PCall = {};
 
 local tPCall = {

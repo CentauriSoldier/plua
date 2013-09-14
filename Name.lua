@@ -1,3 +1,14 @@
+--[[########################################################################
+#	 																	| Name |																			#
+#  											 | Concept and Code By Centauri Soldier |															#
+#  									  | http://www.github.com/CentauriSoldier/LuaPlugs |													#
+#													  |||>>>|| VERSION 2.2 ||<<<|||																#
+#													  																											#
+#		This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.								#
+#		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
+#		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.			#
+#########################################################################]]
+
 --[[Description
 <p>The Name Action Plugin is a great asset for anyone making an RPG or any game for that matter.<br/>
 This plugin can make your NPCs have random common names or even unique names making it an indipensible plugin for any AMS game developer.

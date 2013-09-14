@@ -1,3 +1,14 @@
+--[[########################################################################
+#	 																	| table |																				#
+#  											 | Concept and Code By Centauri Soldier |															#
+#  									  | http://www.github.com/CentauriSoldier/LuaPlugs |													#
+#													  |||>>>|| VERSION 3.4 ||<<<|||																#
+#													  																											#
+#		This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.								#
+#		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
+#		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.			#
+#########################################################################]]
+
 local tEscapeChars = {
 	[1] = {
 		Char = "\\",
@@ -110,6 +121,31 @@ if type(fFunc) == "function" then
 end
 	
 return ""
+end
+
+
+
+function table.copy(vInput)
+
+	if type(vInput) ~= "table" then
+	return vInput
+	end
+	
+	local tNew = {};
+	local tMeta = getmetatable(vInput);
+			
+	for vIndex, vItem in pairs(vInput) do
+		
+		if type(vItem) == "table" then
+		vItem = table.copy(vItem);
+		end
+		
+	tNew[vIndex] = vItem;
+	end
+	
+	setmetatable(tNew, tMeta);
+
+return tNew
 end
 
 

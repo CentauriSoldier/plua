@@ -1,88 +1,13 @@
---[[ 
-Version History
-
-Version 1.1.0.0
-Updated the IRLua Plugin Helper Functions
-Fixed XML readout order
-Added new functions:
-	math.createcounter()
-	math.getcounterpos()
-	math.getprimes()
-	math.iseven()
-	math.isprime()
-	math.stepcounter()
-
-Version 1.2.0.0
-Updated the IRLua Plugin Helper Functions
-Added new functions:
-	math.getprimefactors()
-	math.lcd()
-	
-Version 1.3.0.0
-Fixed a bug in math.basextobase10()
-Fixed a bug in math.fractiontodecimal()
-Added new functions:
-	math.log() --Allows the input of the log base (where the stock AMS action "Math.Log" does not).
-	math.ln()
-	
-Version 1.4.0.0
-Updated the IRLua Plugin Helper Functions (v2.4)
-Added new functions:
-	math.coefficientofvariation()
-	math.decimalcolortohex()
-	math.decimalcolortorgb()
-	math.fivesummarydata()
-	math.hexcolortorgb()
-	math.mean()
-	math.median()
-	math.mode()
-	math.numbercount()
-	math.numbertotable()
-	math.range()
-	math.rgbcolortohex()
-	math.standarddeviation()
-	math.summation()
-	math.variance()
-	
-	
-Version 1.5.0.0
-Fixed a bug in the math.variance() function
-
-Version 1.6.0.0
-Updated the IRLua Plugin Helper Functions (v2.5)
-Added new functions:
-
-Fixed Bugs in/Improved Functions:
-	math.getprimes()
-	math.iseven()
-	math.integer()
-	math.negative()
-
-Version 2.0.0.0
-Converted plugin to pure lua
-Removed IRLua Plugin Helper Functions for speed
-Made all functions lower case to align style with lua
-Removed math.sortnumericdatabase function
-Added math.factorial() function.
-
-Version 2.0.0.1
-Fixed a bug in and added return types for the math.factorial() function.
-
-
-
-
-TODO
---Add math.solvetrianle({a,A,b,B,c,C})
-fix the divide function by using the modulus function
-
-RadiansToDegrees
-DegreesToRadians
-PolarToRect
-RectToPolar
-Imaginary and Complex number functions
-
-
-]]
+--[[########################################################################
+#	 																	| math |																				#
+#  											 | Concept and Code By Centauri Soldier |															#
+#  									  | http://www.github.com/CentauriSoldier/LuaPlugs |													#
+#													  |||>>>|| VERSION 3.2 ||<<<|||																#
+#													  																											#
+#		This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.								#
+#		To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/											#
+#		or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.			#
+#########################################################################]]
 
 local tCounters = {};
 local e = 2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852516642742746639193200305992181741359662904357290033429526059563073813232862794349076323382988075319525101901157383418793070215408914993488416750924476146066808226480016847741185374234544243710753907774499206955170276183860626133138458300075204493382656029760673711320070932870912744374704723069697720931014169283681902551510865746377211125238978442505695369677078544996996794686445490598793163688923009879312773617821542499922957635148220826989519366803318252886939849646510582093923982948879332036250944311730123819706841614039701983767932068328237646480429531180232878250981945581530175671736133206981125099618188159304169035159888851934580727386673858942287922849989208680582574927961048419844436346324496848756023362482704197862320900216099023530436994184914631409343173814364054625315209618369088870701676839642437814059271456354906130310720851038375051011574770417189861068739696552126715468895703503;
