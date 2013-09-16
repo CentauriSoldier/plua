@@ -9,7 +9,7 @@
 > or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 --]]
 
-function io.addsafefunctions(tFunctions)
+function io.addresfunctions(tFunctions)
 
 	if type(tFunctions) == "table" then
 		
@@ -37,7 +37,7 @@ local tFunctions = LuaExt.GetRestrictedFunctions();
 local bOK, hFile = pcall(io.open, pFile, "rb");
 
 	if not bOK or not hFile then
-	return false, "could not open file for reading";
+	return false, "could not open file for reading"
 	end
 
 	sScript = hFile:read("*all");
@@ -46,7 +46,7 @@ local bOK, hFile = pcall(io.open, pFile, "rb");
 	tFunctions = tResFunctionList
 	end
 
-	for nIndex, sFunction in pairs(tFunctions) do		
+	for nIndex, sFunction in pairs(tFunctions) do
 	local nLastFound = 1;
 		
 		repeat

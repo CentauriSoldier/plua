@@ -138,7 +138,7 @@ end
 
 
 
-function string.uuid(sInputPrefix, )
+function string.uuid(sInputPrefix, nMaxPrefixLength)
 local tChars = {"7","f","1","e","3","c","6","b","5","9","a","4","8","d","0","2"};
 local nChars = #tChars;
 local sPrefix = "";

@@ -13,7 +13,7 @@ LuaExt = {};
 
 local tLuaExt = {
 	Author = "Centauri Soldier",
-	Libs = {"math","string", "table"},
+	Libs = {"io","math","string", "table"},
 	License = "",
 	RestrictedFunctions = { --Functions that will be search for by the io.scriptissafe() function. You can toggle each of these by using comments.
 		"assert",
