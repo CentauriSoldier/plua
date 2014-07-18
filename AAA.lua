@@ -15,6 +15,7 @@ local tErrors = {};
 
 
 
+
 --[[************===***********->
 		AAA.SetGlobalErrorMessage
 <-**************===*********<<

@@ -14,14 +14,17 @@ local tLuaPlugs = {
 	Libs = {
 		[1] = {
 			Active = true,
-			Name = "Help",
+			Name = "Name",
 			RequiresLuaExt = true,
 		},
 	},
-	LuaExtPath = "luaext",
-	Path = "",
+	LuaExtPath = "/luaext",
+	Path = "Plugins",
 };
 
+function LuaPlugs.GetPath()
+return  tLuaPlugs.Path
+end
 
 function LuaPlugs.Init()
 local bRequireLuaExt = false;

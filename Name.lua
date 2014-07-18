@@ -26,7 +26,7 @@ This plugin can make your NPCs have random common names or even unique names mak
 <p>Converted the script to a plugin.</p>
 <p>Added several new names.</p>
 ]]
-require "AAA";
+require (LuaPlugs.GetPath().."/AAA");
 Name = {};
 
 
@@ -288,10 +288,10 @@ function Name.SetLastType(vVar)
 --=========================
 -- Name.Generate
 --=========================
-function Name.Generate(nType, nLength)
-AAA.CheckNumArgs(arg,2);
-local nType = AAA.CheckTypes(arg,1,{"number"});
-local nLength = AAA.CheckTypes(arg,2,{"number"});
+function Name.Generate(...)
+AAA.CheckNumArgs({...},2);
+local nType = AAA.CheckTypes({...},1,{"number"});
+local nLength = AAA.CheckTypes({...},2,{"number"});
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 local sRet = "";
 local nLastType = 1;
@@ -375,9 +375,9 @@ end
 -- Name.GetRandom
 --=========================
 function Name.GetRandom(...)
-AAA.CheckNumArgs(arg,2);
-local sClass = AAA.CheckTypes(arg,1,{"string"});
-local sLetter = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sClass = AAA.CheckTypes({...},1,{"string"});
+local sLetter = AAA.CheckTypes({...},2,{"string"});
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	if sClass == "*" then
 	sClass = NAME_CLASSES[math.random(1, NAME_MAX_CLASSES)];

@@ -8,7 +8,7 @@
 > To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/
 > or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 --]]
-require "AAA";
+require(LuaPlugs.GetPath().."/AAA");
 
 Help = {};
 local tTopics = {};
@@ -254,14 +254,14 @@ end
 -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 function Help.AddTopic(...)
-AAA.CheckNumArgs(arg, 1);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
-local sParent = AAA.CheckTypes(arg,2,{"string","nil"});
-local sDesc = AAA.CheckTypes(arg,3,{"string","nil"});
-local tCategories = AAA.CheckTypes(arg,4,{"table","nil"});
-local tKeywords = AAA.CheckTypes(arg,5,{"table","nil"});
-local sImagePath = AAA.CheckTypes(arg,6,{"string","nil"});
-local uImageData = AAA.CheckTypes(arg,7,{"userdata","nil"});
+AAA.CheckNumArgs({...}, 1);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
+local sParent = AAA.CheckTypes({...},2,{"string","nil"});
+local sDesc = AAA.CheckTypes({...},3,{"string","nil"});
+local tCategories = AAA.CheckTypes({...},4,{"table","nil"});
+local tKeywords = AAA.CheckTypes({...},5,{"table","nil"});
+local sImagePath = AAA.CheckTypes({...},6,{"string","nil"});
+local uImageData = AAA.CheckTypes({...},7,{"userdata","nil"});
 
 	if not tTopics[sTopic] then
 	tTopics[sTopic] = {};
@@ -284,8 +284,8 @@ end
 
 
 function Help.Export(...)
-AAA.CheckNumArgs(arg, 1);
-local pFile = AAA.CheckTypes(arg,1,{"string"});
+AAA.CheckNumArgs({...}, 1);
+local pFile = AAA.CheckTypes({...},1,{"string"});
 local bOk, hFile = pcall(io.open, pFile, "wb");
 
 	if bOk and hFile then
@@ -333,8 +333,8 @@ end
 
 
 function Help.GetChildren(...)
-AAA.CheckNumArgs(arg, 1);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
+AAA.CheckNumArgs({...}, 1);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
 
 	if tTopics[sTopic] then
 	return tTopics[sTopic].Children
@@ -346,8 +346,8 @@ end
 
 
 function Help.GetChildCount(...)
-AAA.CheckNumArgs(arg, 1);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
+AAA.CheckNumArgs({...}, 1);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
 
 	if tTopics[sTopic] then
 	return #tTopics[sTopic].Children
@@ -433,10 +433,10 @@ end
 
 
 function Help.ImportFile(...)
-AAA.CheckNumArgs(arg, 1);
-local pFile = AAA.CheckTypes(arg,1,{"string"});
-local bImportExisting = AAA.CheckTypes(arg,2,{"boolean","nil"});
-local bMerge = AAA.CheckTypes(arg,3,{"boolean","nil"});
+AAA.CheckNumArgs({...}, 1);
+local pFile = AAA.CheckTypes({...},1,{"string"});
+local bImportExisting = AAA.CheckTypes({...},2,{"boolean","nil"});
+local bMerge = AAA.CheckTypes({...},3,{"boolean","nil"});
 
 local bOk, hFile = pcall(io.open, pFile, "rb");
 
@@ -456,29 +456,29 @@ end
 
 
 function Help.ImportString()
-AAA.CheckNumArgs(arg, 1);
-local sString = AAA.CheckTypes(arg,1,{"string"});
-local bImportExisting = AAA.CheckTypes(arg,2,{"boolean","nil"});
-local bMerge = AAA.CheckTypes(arg,3,{"boolean","nil"});
+AAA.CheckNumArgs({...}, 1);
+local sString = AAA.CheckTypes({...},1,{"string"});
+local bImportExisting = AAA.CheckTypes({...},2,{"boolean","nil"});
+local bMerge = AAA.CheckTypes({...},3,{"boolean","nil"});
 return ImportString(sString, bImportExisting, bMerge);
 end
 
 
 
 function Help.ImportTable(...)
-AAA.CheckNumArgs(arg, 1);
-local tTable = AAA.CheckTypes(arg,1,{"table"});
-local bImportExisting = AAA.CheckTypes(arg,2,{"boolean","nil"});
-local bMerge = AAA.CheckTypes(arg,3,{"boolean","nil"});
+AAA.CheckNumArgs({...}, 1);
+local tTable = AAA.CheckTypes({...},1,{"table"});
+local bImportExisting = AAA.CheckTypes({...},2,{"boolean","nil"});
+local bMerge = AAA.CheckTypes({...},3,{"boolean","nil"});
 return ImportString(table.tostring(tTable, 0), bImportExisting, bMerge);
 end
 
 
 
 function Help.SetCategories(...)
-AAA.CheckNumArgs(arg, 2);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
-local tCategories = AAA.CheckTypes(arg,2,{"table"});
+AAA.CheckNumArgs({...}, 2);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
+local tCategories = AAA.CheckTypes({...},2,{"table"});
 
 	if tTopics[sTopic] then
 	tTopics[sTopic].Categories = {};
@@ -496,9 +496,9 @@ end
 
 
 function Help.SetImageData(...)
-AAA.CheckNumArgs(arg, 2);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
-local pImageData = AAA.CheckTypes(arg,2,{"userdata"});
+AAA.CheckNumArgs({...}, 2);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
+local pImageData = AAA.CheckTypes({...},2,{"userdata"});
 
 	if tTopics[sTopic] then
 	tTopics[sTopic].ImageData = pImageData;
@@ -511,9 +511,9 @@ end
 
 
 function Help.SetImagePath(...)
-AAA.CheckNumArgs(arg, 2);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
-local pImagePath = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...}, 2);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
+local pImagePath = AAA.CheckTypes({...},2,{"string"});
 
 	if tTopics[sTopic] then
 	tTopics[sTopic].ImagePath = pImagePath;
@@ -526,9 +526,9 @@ end
 
 
 function Help.SetKeywords(...)
-AAA.CheckNumArgs(arg, 2);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
-local tKeywords = AAA.CheckTypes(arg,2,{"table"});
+AAA.CheckNumArgs({...}, 2);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
+local tKeywords = AAA.CheckTypes({...},2,{"table"});
 
 	if tTopics[sTopic] then
 	tTopics[sTopic].Keywords = {};
@@ -546,9 +546,9 @@ end
 
 
 function Help.SetParent(...)
-AAA.CheckNumArgs(arg, 2);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
-local sParent = AAA.CheckTypes(arg,2,{"string","userdata"});
+AAA.CheckNumArgs({...}, 2);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
+local sParent = AAA.CheckTypes({...},2,{"string","userdata"});
 
 	if tTopics[sTopic] then
 
@@ -577,8 +577,8 @@ end
 
 
 function Help.TopicExists(...)
-AAA.CheckNumArgs(arg, 1);
-local sTopic = AAA.CheckTypes(arg,1,{"string"});
+AAA.CheckNumArgs({...}, 1);
+local sTopic = AAA.CheckTypes({...},1,{"string"});
 
 	if tTopics[sTopic] then
 	return true

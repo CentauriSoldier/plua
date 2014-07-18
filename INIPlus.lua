@@ -50,9 +50,9 @@ end
 -- INIPlus.DisplayError
 --==============
 function INIPlus.DisplayError(...)
-AAA.CheckNumArgs(arg,2);
-local sError = AAA.CheckTypes(arg,1,{"string"});
-local sFunctionName = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sError = AAA.CheckTypes({...},1,{"string"});
+local sFunctionName = AAA.CheckTypes({...},2,{"string"});
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 if INIPLUS_ERRORS_ON then
 sLastError = "";
@@ -72,9 +72,9 @@ end
 -- INIPlus.Read
 --==============
 function INIPlus.Read(...)
-AAA.CheckNumArgs(arg,2);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sCallingFunction = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sCallingFunction = AAA.CheckTypes({...},2,{"string"});
 local tSections = {};
 --created for when we need to index the sections and value names
 local tNames = {};
@@ -229,10 +229,10 @@ end
 -- INIPlus.Write
 --==============
 function INIPlus.Write(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local tData = AAA.CheckTypes(arg,2,{"table"});
-local sCallingFunction = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local tData = AAA.CheckTypes({...},2,{"table"});
+local sCallingFunction = AAA.CheckTypes({...},3,{"string"});
 local sSpacer = "";
 local sDataText = "";
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -298,9 +298,9 @@ end
 
 
 function INIPlus.CreateSection(...)
-AAA.CheckNumArgs(arg,3);
-local nID = AAA.CheckTypes(arg,1,{"number"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},3);
+local nID = AAA.CheckTypes({...},1,{"number"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
 
 	if tINIPlus.Files[nID] then
 		
@@ -321,10 +321,10 @@ end
 
 
 function INIPlus.SetSectionName(...)
-AAA.CheckNumArgs(arg,3);
-local nID = AAA.CheckTypes(arg,1,{"number"});
-local sOldSection = AAA.CheckTypes(arg,2,{"string"});
-local sNewSection = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local nID = AAA.CheckTypes({...},1,{"number"});
+local sOldSection = AAA.CheckTypes({...},2,{"string"});
+local sNewSection = AAA.CheckTypes({...},3,{"string"});
 
 	if tINIPlus.Files[nID] then
 		
@@ -374,9 +374,9 @@ end
 -- INIPlus.CreateFromINI
 --==============
 function INIPlus.CreateFromINI(...)
-AAA.CheckNumArgs(arg,2);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sINIFile = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sINIFile = AAA.CheckTypes({...},2,{"string"});
 local tNewData = {};
 if File.DoesExist(sINIFile) then
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -423,10 +423,10 @@ end
 -- INIPlus.ChangeSectionName
 --==============
 function INIPlus.ChangeSectionName(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sOldSectionName = AAA.CheckTypes(arg,2,{"string"});
-local sNewSectionName = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sOldSectionName = AAA.CheckTypes({...},2,{"string"});
+local sNewSectionName = AAA.CheckTypes({...},3,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.ChangeSectionName");
 local tData = tTemp[1];
 local tIndexedData = tTemp[2];
@@ -460,10 +460,10 @@ end
 -- INIPlus.CopySection
 --==============
 function INIPlus.CopySection(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sNewSection = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sNewSection = AAA.CheckTypes({...},3,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.CopySection");
 local tData = tTemp[1];
 local tIndexedData= tTemp[2];
@@ -512,8 +512,8 @@ end
 -- INIPlus.CountSections
 --==============
 function INIPlus.CountSections(...)
-AAA.CheckNumArgs(arg,1);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
+AAA.CheckNumArgs({...},1);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
 local tData = INIPlus.Read(sINIPlusFile, "INIPlus.CountSections")[1];
 local nRet = -1;
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -531,9 +531,9 @@ end
 -- INIPlus.CountValues
 --==============
 function INIPlus.CountValues(...)
-AAA.CheckNumArgs(arg,2);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
 local tData = INIPlus.Read(sINIPlusFile, "INIPlus.CountSections")[1];
 local nRet = -1;
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -554,9 +554,9 @@ end
 -- INIPlus.DeleteSection
 --==============
 function INIPlus.DeleteSection(...)
-AAA.CheckNumArgs(arg,2);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sInputSection = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sInputSection = AAA.CheckTypes({...},2,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.DeleteSection");
 local tData = tTemp[1];
 local tDataNames = tTemp[2];
@@ -609,10 +609,10 @@ end
 -- INIPlus.DeleteValue
 --==============
 function INIPlus.DeleteValue(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sInputValue = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sInputValue = AAA.CheckTypes({...},3,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.DeleteValue");
 local tData = tTemp[1];
 local tDataNames = tTemp[2];
@@ -669,10 +669,10 @@ end
 -- INIPlus.ExportToINI
 --==============
 function INIPlus.ExportToINI(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sINIFile = AAA.CheckTypes(arg,2,{"string"});
-local bIncludeAttributes = AAA.CheckTypes(arg,3,{"boolean"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sINIFile = AAA.CheckTypes({...},2,{"string"});
+local bIncludeAttributes = AAA.CheckTypes({...},3,{"boolean"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.ExportToINI");
 local tData = tTemp[1];
 local tDataNames = tTemp[2];
@@ -731,9 +731,9 @@ end
 -- INIPlus.GetSectionAttribute
 --==============
 function INIPlus.GetSectionAttribute(...)
-AAA.CheckNumArgs(arg,2);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
 local tData = INIPlus.Read(sINIPlusFile, "INIPlus.GetSectionAttribute")[1];
 local tRet = "";
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -756,8 +756,8 @@ end
 -- INIPlus.GetSectionNames
 --==============
 function INIPlus.GetSectionNames(...)
-AAA.CheckNumArgs(arg,1);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
+AAA.CheckNumArgs({...},1);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.GetSectionNames");
 local tData = tTemp[1]; 
 local tDataNames = tTemp[2];
@@ -779,10 +779,10 @@ end
 -- INIPlus.GetValue
 --==============
 function INIPlus.GetValue(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sValue = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sValue = AAA.CheckTypes({...},3,{"string"});
 local tData = INIPlus.Read(sINIPlusFile, "INIPlus.GetValue")[1];
 local sRet = "";
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -806,10 +806,10 @@ end
 -- INIPlus.GetValueAttribute
 --==============
 function INIPlus.GetValueAttribute(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sValue = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sValue = AAA.CheckTypes({...},3,{"string"});
 local tData = INIPlus.Read(sINIPlusFile, "INIPlus.GetValueAttribute")[1];
 local sRet = "";
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -834,9 +834,9 @@ end
 -- INIPlus.GetValueNames
 --==============
 function INIPlus.GetValueNames(...)
-AAA.CheckNumArgs(arg,2);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.GetValueNames");
 local tData = tTemp[1]; 
 local tDataNames = tTemp[2];
@@ -863,8 +863,8 @@ end
 -- INIPlus.ReadToTable
 --==============
 function INIPlus.ReadToTable(...)
-AAA.CheckNumArgs(arg,1);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
+AAA.CheckNumArgs({...},1);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.ReadToTable");
 local tData = tTemp[1];
 local tIndexedData = tTemp[2];
@@ -882,9 +882,9 @@ end
 -- INIPlus.SectionExists
 --==============
 function INIPlus.SectionExists(...)
-AAA.CheckNumArgs(arg,2);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
+AAA.CheckNumArgs({...},2);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
 local tData = INIPlus.Read(sINIPlusFile, "INIPlus.SectionExists")[1];
 local bRet = nil
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -906,10 +906,10 @@ end
 -- INIPlus.SetSectionAttribute
 --==============
 function INIPlus.SetSectionAttribute(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sAttribute = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sAttribute = AAA.CheckTypes({...},3,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.SetSectionAttribute");
 local tData = tTemp[1];
 local tIndexedData = tTemp[2];
@@ -947,11 +947,11 @@ end
 -- INIPlus.SetValueAttribute
 --==============
 function INIPlus.SetValueAttribute(...)
-AAA.CheckNumArgs(arg,4);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sValue = AAA.CheckTypes(arg,3,{"string"});
-local sAttribute = AAA.CheckTypes(arg,4,{"string"});
+AAA.CheckNumArgs({...},4);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sValue = AAA.CheckTypes({...},3,{"string"});
+local sAttribute = AAA.CheckTypes({...},4,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.SetValueAttribute");
 local tData = tTemp[1];
 local tIndexedData = tTemp[2];
@@ -1007,11 +1007,11 @@ end
 -- INIPlus.SetValueData
 --==============
 function INIPlus.SetValueData(...)
-AAA.CheckNumArgs(arg,4);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sValue = AAA.CheckTypes(arg,3,{"string"});
-local sData = AAA.CheckTypes(arg,4,{"string"});
+AAA.CheckNumArgs({...},4);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sValue = AAA.CheckTypes({...},3,{"string"});
+local sData = AAA.CheckTypes({...},4,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.SetValueData");
 local tData = tTemp[1];
 local tIndexedData = tTemp[2];
@@ -1066,12 +1066,12 @@ end
 -- INIPlus.SetValueAttributeAndData
 --===================
 function INIPlus.SetValueAttributeAndData(...)
-AAA.CheckNumArgs(arg,5);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sValue = AAA.CheckTypes(arg,3,{"string"});
-local sAttribute = AAA.CheckTypes(arg,4,{"string"});
-local sData = AAA.CheckTypes(arg,5,{"string"});
+AAA.CheckNumArgs({...},5);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sValue = AAA.CheckTypes({...},3,{"string"});
+local sAttribute = AAA.CheckTypes({...},4,{"string"});
+local sData = AAA.CheckTypes({...},5,{"string"});
 local tTemp = INIPlus.Read(sINIPlusFile, "INIPlus.SetValueAttributeAndData");
 local tData = tTemp[1];
 local tIndexedData = tTemp[2];
@@ -1129,8 +1129,8 @@ end
 -- INIPlus.ShowErrors
 --==============
 function INIPlus.ShowErrors(...)
-AAA.CheckNumArgs(arg,1);
-local bShowErrors = AAA.CheckTypes(arg,1,{"boolean"});
+AAA.CheckNumArgs({...},1);
+local bShowErrors = AAA.CheckTypes({...},1,{"boolean"});
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 if bShowErrors == true then
 INIPLUS_ERRORS_ON = true;
@@ -1145,10 +1145,10 @@ end
 -- INIPlus.ValueExists
 --==============
 function INIPlus.ValueExists(...)
-AAA.CheckNumArgs(arg,3);
-local sINIPlusFile = AAA.CheckTypes(arg,1,{"string"});
-local sSection = AAA.CheckTypes(arg,2,{"string"});
-local sValue = AAA.CheckTypes(arg,3,{"string"});
+AAA.CheckNumArgs({...},3);
+local sINIPlusFile = AAA.CheckTypes({...},1,{"string"});
+local sSection = AAA.CheckTypes({...},2,{"string"});
+local sValue = AAA.CheckTypes({...},3,{"string"});
 local tData = INIPlus.Read(sINIPlusFile, "INIPlus.ValueExists")[1];
 local bRet = nil;
 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
