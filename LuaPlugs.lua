@@ -11,33 +11,51 @@
 
 LuaPlugs = {};
 local tLuaPlugs = {
+	AutoCallInit = false,
 	Libs = {
 		[1] = {
+			Active = true,
+			Name = "Help",
+			RequiresLuaExt = true,
+		},
+		[2] = {
 			Active = true,
 			Name = "Name",
 			RequiresLuaExt = true,
 		},
+		[3] = {
+			Active = true,
+			Name = "PCall",
+			RequiresLuaExt = true,
+		},	
 	},
-	LuaExtPath = "/luaext",
-	Path = "Plugins",
+	LuaExtPath = "",
+	Path = "",
 };
 
-function LuaPlugs.GetPath()
-return  tLuaPlugs.Path
-end
 
-function LuaPlugs.Init()
+function LuaPlugs.Init(pPath, pLuaExt)
 local bRequireLuaExt = false;
-local bLuaExtHasBeenCalled = false;
-
+--local bLuaExtHasBeenCalled = false;
+	
+	--set the plugin path
+	if type(pPath) == "string" then
+	tLuaPlugs.Path = pPath;
+	end
+	
+	--set the luaext path
+	if type(pLuaExt) == "string" then
+	tLuaPlugs.LuaExtPath = pLuaExt;
+	end
+	
 	for nLib, tLib in pairs(tLuaPlugs.Libs) do
 		
 		if tLib.Active then
 			
 			if tLib.RequiresLuaExt then
 				
-				if not bLuaExtHasBeenCalled then
-				local sPath = tLuaPlugs.Path.."."..tLuaPlugs.LuaExtPath;
+				if not LuaExt then
+				local sPath = tLuaPlugs.LuaExtPath;
 				require(sPath..".".."LuaExt");
 					
 					if LuaExt then
@@ -52,12 +70,14 @@ local bLuaExtHasBeenCalled = false;
 				end
 				
 			end
-			
-		require(tLuaPlugs.Path.."."..tLib.Name);
+						
+		require(tLuaPlugs.Path..".modules."..tLib.Name);
 		end
 		
 	end
 
 end
 
+if tLuaPlugs.AutoCallInit then
 LuaPlugs.Init();
+end
