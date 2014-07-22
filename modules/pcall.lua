@@ -123,7 +123,7 @@ t_rcall.methods[s_function] = fFunction
 end
 
 
-
+--DELETE THIS USE FUNCTION
 local function table_find(tTable, s_item)
 	
 	if tTable then
@@ -143,7 +143,7 @@ end
 
 
 
-local function UnprotectAllFunctions()
+local function unprotectAllFunctions()
 
 	if t_rcall.methods then
 		
@@ -190,7 +190,7 @@ end
 
 
 
-function rcall.AddResItem(s_item, bRefresh)
+function rcall.addResItem(s_item, bRefresh)
 local n_index = table_find(t_rcall.resItems, s_item);
 	
 	if not n_index then
@@ -211,29 +211,29 @@ end
 
 
 
-function rcall.GetPCallList()
+function rcall.getPCallList()
 return t_rcall.pcallItems
 end
 
 
 
-function rcall.GetResList()
+function rcall.getResList()
 return t_rcall.resItems
 end
 
 
 
-function rcall.OnError(sError)
+function rcall.onError(sError)
 end
 
 
 
-function rcall.Refresh(sInpTable, tInpTable)
+function rcall.refresh(sInpTable, tInpTable)
 local sTable = ""
 local tTable = {};
 	
 	if not t_rcall.hasBeenReset then
-	UnprotectAllFunctions();
+	unprotectAllFunctions();
 	t_rcall.hasBeenReset = true;
 	end
 	
