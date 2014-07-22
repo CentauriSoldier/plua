@@ -30,7 +30,7 @@ end
 		aaa.checkNumArgs
 <-********===********<<
 Checks the number of arguments in the table and throws a syntax error if there are not enough. 
-This is useful for checking the number of arguments available to your aciton.
+This is useful for checking the number of arguments available to your action.
 Keep in mind, any arguments that accept nil must not be counted in the number of total arguments
 and should be placed after all other function arguments.
 ]]
@@ -49,7 +49,7 @@ end
 		aaa.checkTableVars
 <-********===********<<
 Ensures that your table contains data of only the specified type. If it does not then false is returned.
-This will see nil values as subtable declarations and will, therefore, ignore them.
+This will see nil values as suitable declarations and will, therefore, ignore them.
 TODO - MAKE THIS RECURSIVE
 ]]
 function aaa.checkTableVars(t_table,t_varTypes)
@@ -83,7 +83,8 @@ end
 		aaa.checkTypes
 <-********===********<<
 Checks the value at a given argument table position to see if it is any of the specified types,
-if Not it throws a syntax error. Possible variable types[boolean, function, nil, number, string, table, thread, userdata]
+if Not it throws a syntax error. Possible variable types[boolean, function, nil, number, string,
+table, thread, userdata]
 ]]
 function aaa.checkTypes(t_args, n_arg, t_types)
 local s_type = type(t_args[n_arg]);

@@ -10,7 +10,7 @@
 --]]
 
 plua = {};
-local tplua = {
+local t_plua = {
 	autoCallInit = false,
 	libs = {
 		[1] = {
@@ -29,7 +29,7 @@ local tplua = {
 			requiresLuax = true,
 		},	
 	},
-	luaxtPath = "",
+	luaxPath = "",
 	path = "",
 };
 
@@ -40,22 +40,22 @@ local bRequireLuaExt = false;
 	
 	--set the plugin path
 	if type(p_path) == "string" then
-	tplua.path = p_path;
+	t_plua.path = p_path;
 	end
 	
 	--set the luaext path
 	if type(p_luax) == "string" then
-	tplua.luaxtPath = p_luax;
+	t_plua.luaxPath = p_luax;
 	end
 	
-	for nLib, t_lib in pairs(tplua.libs) do
+	for n_lib, t_lib in pairs(t_plua.libs) do
 		
 		if t_lib.active then
 			
 			if t_lib.requiresLuax then
 				
 				if not luax then
-				local s_path = tplua.luaxtPath;
+				local s_path = t_plua.luaxPath;
 				require(s_path..".".."luax");
 					
 					if luax then
@@ -71,7 +71,7 @@ local bRequireLuaExt = false;
 				
 			end
 						
-		require(tplua.path..".modules."..t_lib.name);
+		require(t_plua.path..".modules."..t_lib.name);
 		end
 		
 	end

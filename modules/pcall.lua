@@ -1,30 +1,30 @@
 --[[
-> PCall
+> rcall
 > Concept and Code By Centauri Soldier
-> http://www.github.com/CentauriSoldier/LuaPlugs
-> Version 1.2
+> http://www.github.com/CentauriSoldier/plua
+> Version 1.3
 >
 > This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
 > To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/
 > or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 --]]
-PCall = {};
+rcall = {};
 
-local tPCall = {
-	HasBeenReset = false,
-	LogFile = "",
-	Methods = {},
-	PCallItems = {},
-	ResItems = {"PCall","coroutine","package","preload","loaded","debug","math","io","string","table","os","error","type","newproxy","pairs","ipairs","require","load","unpack","setmetatable","getmetatable","rawset","rawget","rawequal","getfenv","setfenv","assert","print","gcinfo","module","next","select","collectgarbage","loadfile","xpcall","tostring","tonumber","dofile","loadstring","pcall"},
+local t_rcall = {
+	hasBeenReset = false,
+	logFile = "",
+	methods = {},
+	pcallItems = {},
+	resItems = {"pcall","coroutine","package","preload","loaded","debug","math","io","string","table","os","error","type","newproxy","pairs","ipairs","require","load","unpack","setmetatable","getmetatable","rawset","rawget","rawequal","getfenv","setfenv","assert","print","gcinfo","module","next","select","collectgarbage","loadfile","xpcall","tostring","tonumber","dofile","loadstring","rcall"},
 };
 
 
 
-local function IsPCall(sItem)
+local function isRcall(s_item)
 
-	for nIndex, sPCallItem in pairs(tPCall.PCallItems) do
+	for n_index, s_pcallItem in pairs(t_rcall.pcallItems) do
 		
-		if sItem == sPCallItem then
+		if s_item == s_pcallItem then
 		return true
 		end
 		
@@ -35,11 +35,11 @@ end
 
 
 
-local function IsRestricted(sItem)
+local function isRestricted(s_item)
 
-	for nIndex, sResItem in pairs(tPCall.ResItems) do
+	for n_index, s_resItem in pairs(t_rcall.resItems) do
 		
-		if sItem == sResItem then
+		if s_item == s_resItem then
 		return true
 		end
 		
@@ -50,110 +50,54 @@ end
 
 
 
-function ForgetFunction(sFunction)
+function forgetFunction(s_function) -- WHY IS THIS NOT LOCAL...? TEST TO SEE IF LOCAL WORKS...
 
-	if tPCall.Methods[sFunction] then
-	tPCall.Methods[sFunction] = nil;
+	if t_rcall.methods[s_function] then
+	t_rcall.methods[s_function] = nil;
 	end
 	
 end
 
 
 
-local function GetFunctionName(fFunc)
-
-if type(fFunc) == "function" then
-
-	for vIndex, vItem in pairs(getfenv(fFunc)) do
-		
-		if vIndex ~= "_G" then
-		local sItemType = type(vItem);
-			
-			if sItemType == "function" then
-				
-				if vItem == fFunc then
-				return vIndex
-				end
-			
-			elseif sItemType == "table" then
-				
-				for vIndex2, vItem2 in pairs(vItem)	do
-				local sItemType2 = type(vItem2);
-	
-					if sItemType2 == "function" then
-				
-						if vItem2 == fFunc then
-						return vIndex.."."..vIndex2
-						end
-					
-					elseif sItemType2 == "table" then
-					
-						for vIndex3, vItem3 in pairs(vItem2) do
-						local sItemType3 = type(vItem3);
-			
-							if sItemType3 == "function" then
-						
-								if vItem3 == fFunc then
-								return vIndex.."."..vIndex2.."."..vIndex3
-								end
-									
-							end
-							
-						end			
-							
-					end
-					
-				end
-				
-			end
-			
-		end
-	
-	end
-	
-end
-	
-return ""
-end
 
 
+local function getFunctionStrings(s_function)
+s_function = string.gsub(s_function, "_PC_", "");
+s_function = string.gsub(s_function, "_XPC_", "%.");
+local s_altFunction = "_PC_"..string.gsub(s_function, "%.", "_XPC_").."";
+local s_remember = "rememberFunction(\""..s_function.."\", "..s_function..");";
+local s_ls = s_altFunction.." = "..s_function..";\r\nfunction "..s_function.."(...)"..[[
 
-local function GetFunctionStrings(sFunction)
-sFunction = string.gsub(sFunction, "_PC_", "");
-sFunction = string.gsub(sFunction, "_XPC_", "%.");
-local sAltFunction = "_PC_"..string.gsub(sFunction, "%.", "_XPC_").."";
-local sRemember = "RememberFunction(\""..sFunction.."\", "..sFunction..");";
-local sLS = sAltFunction.." = "..sFunction..";\r\nfunction "..sFunction.."(...)"..[[
-
-local bOK, vRet = pcall(]]..sAltFunction..[[, ...);
+local bOK, vRet = rcall(]]..s_altFunction..[[, ...);
 
 	if bOK then
 	return vRet
 	
 	else
-	PCall.OnError(vRet);
+	rcall.OnError(vRet);
 	
 	end
 
 end
 ]]
 
-return sLS, sRemember
+return s_ls, s_remember
 end
 
 
 
-local function ProtectFunction(sLS, sRemember)
+local function protectFunction(s_ls, s_remember)
 	
-	if type(sLS) == "string" and type(sRemember) == "string" then
-	local fLS = loadstring(sLS);
-	local fRemember = loadstring(sRemember);
+	if type(s_ls) == "string" and type(s_remember) == "string" then
+	local f_ls = loadstring(s_ls);
+	local f_remember = loadstring(s_remember);
 	
-		if type(fLS) == "function" and type(fRemember) == "function" then
-		local bOk, vIgnore = pcall(fRemember);
+		if type(f_ls) == "function" and type(f_remember) == "function" then
+		local b_ok, v_ignore = rcall(f_remember);
 			
-			if bOk then
-			pcall(fLS);
+			if b_ok then
+			rcall(f_ls);
 			end
 			
 		end
@@ -164,30 +108,30 @@ end
 
 
 
-function RecallFunction(sFunction)
+function recallFunction(s_function)
 	
-	if tPCall.Methods[sFunction] then
-	return tPCall.Methods[sFunction]
+	if t_rcall.methods[s_function] then
+	return t_rcall.methods[s_function]
 	end
 	
 end
 
 
 
-function RememberFunction(sFunction, fFunction)
-tPCall.Methods[sFunction] = fFunction
+function rememberFunction(s_function, fFunction)
+t_rcall.methods[s_function] = fFunction
 end
 
 
 
-local function table_find(tTable, sItem)
+local function table_find(tTable, s_item)
 	
 	if tTable then
 		
-		for nIndex, sTableItem in pairs(tTable) do
+		for n_index, sTableItem in pairs(tTable) do
 			
-			if sItem == sTableItem then
-			return nIndex
+			if s_item == sTableItem then
+			return n_index
 			end
 			
 		end
@@ -201,16 +145,16 @@ end
 
 local function UnprotectAllFunctions()
 
-	if tPCall.Methods then
+	if t_rcall.methods then
 		
-		for sMethod, fMethod in pairs(tPCall.Methods) do
-		local sLS = sMethod.." = RecallFunction(\""..sMethod.."\");\r\nForgetFunction(\""..sMethod.."\");";
+		for sMethod, fMethod in pairs(t_rcall.methods) do
+		local s_ls = sMethod.." = recallFunction(\""..sMethod.."\");\r\nForgetFunction(\""..sMethod.."\");";
 		
-		--Dialog.Message("", sLS)
-		local fLS = loadstring(sLS);
+		--Dialog.Message("", s_ls)
+		local f_ls = loadstring(s_ls);
 		
-			--if fLS then
-			fLS();
+			--if f_ls then
+			f_ls();
 			--end
 					
 		end		
@@ -225,14 +169,14 @@ end
 
 
 
-function PCall.AddPCallItem(sItem, bRefresh)
-local nIndex = table_find(tPCall.PCallItems, sItem);
+function rcall.AddPCallItem(s_item, bRefresh)
+local n_index = table_find(t_rcall.pcallItems, s_item);
 	
-	if not nIndex then
-	tPCall.PCallItems[#tPCall.PCallItems + 1] = sItem;
+	if not n_index then
+	t_rcall.pcallItems[#t_rcall.pcallItems + 1] = s_item;
 		
 		if bRefresh then
-		PCall.Refresh();
+		rcall.Refresh();
 		end
 		
 	return 0
@@ -246,14 +190,14 @@ end
 
 
 
-function PCall.AddResItem(sItem, bRefresh)
-local nIndex = table_find(tPCall.ResItems, sItem);
+function rcall.AddResItem(s_item, bRefresh)
+local n_index = table_find(t_rcall.resItems, s_item);
 	
-	if not nIndex then
-	tPCall.ResItems[#tPCall.ResItems + 1] = sItem;
+	if not n_index then
+	t_rcall.resItems[#t_rcall.resItems + 1] = s_item;
 	
 		if bRefresh then
-		PCall.Refresh();
+		rcall.Refresh();
 		end
 		
 	return 0
@@ -267,30 +211,30 @@ end
 
 
 
-function PCall.GetPCallList()
-return tPCall.PCallItems
+function rcall.GetPCallList()
+return t_rcall.pcallItems
 end
 
 
 
-function PCall.GetResList()
-return tPCall.ResItems
+function rcall.GetResList()
+return t_rcall.resItems
 end
 
 
 
-function PCall.OnError(sError)
+function rcall.OnError(sError)
 end
 
 
 
-function PCall.Refresh(sInpTable, tInpTable)
+function rcall.Refresh(sInpTable, tInpTable)
 local sTable = ""
 local tTable = {};
 	
-	if not tPCall.HasBeenReset then
+	if not t_rcall.hasBeenReset then
 	UnprotectAllFunctions();
-	tPCall.HasBeenReset = true;
+	t_rcall.hasBeenReset = true;
 	end
 	
 	
@@ -317,16 +261,16 @@ local tCurrentTable = tTable;
 			
 		if type(vIndex) == "string" then
 		
-			if not IsRestricted(vIndex) and (IsPCall(vIndex) or IsPCall(sTable)) then
+			if not isRestricted(vIndex) and (isRcall(vIndex) or isRcall(sTable)) then
 															
 				if sItemType == "function" then
-				sFunction  = GetFunctionName(vItem);
+				s_function  = string.getfuncname(vItem);
 				
-				local sLS, sRemember = GetFunctionStrings(sFunction);
-				ProtectFunction(sLS, sRemember);
+				local s_ls, s_remember = getFunctionStrings(s_function);
+				protectFunction(s_ls, s_remember);
 				
 				elseif sItemType == "table" then
-				PCall.Refresh(vIndex, vItem);
+				rcall.Refresh(vIndex, vItem);
 				
 				end
 			
@@ -336,19 +280,19 @@ local tCurrentTable = tTable;
 		
 	end
 
-tPCall.HasBeenReset = false;
+t_rcall.hasBeenReset = false;
 end
 
 
 
-function PCall.RemovePCallItem(sItem, bRefresh)
-local nIndex = table_find(tPCall.PCallItems, sItem);
+function rcall.RemovePCallItem(s_item, bRefresh)
+local n_index = table_find(t_rcall.pcallItems, s_item);
 
-	if nIndex then
-	table.remove(tPCall.PCallItems, nIndex);	
+	if n_index then
+	table.remove(t_rcall.pcallItems, n_index);	
 		
 		if bRefresh then
-		PCall.Refresh();
+		rcall.Refresh();
 		end
 		
 	return 0
@@ -359,14 +303,14 @@ end
 
 
 
-function PCall.RemoveResItem(sItem, bRefresh)
-local nIndex = table_find(tPCall.ResItems, sItem);
+function rcall.RemoveResItem(s_item, bRefresh)
+local n_index = table_find(t_rcall.resItems, s_item);
 
-	if nIndex then
-	tabel.remove(tPCall.ResItems, nIndex);
+	if n_index then
+	tabel.remove(t_rcall.resItems, n_index);
 		
 		if bRefresh then
-		PCall.Refresh();
+		rcall.Refresh();
 		end
 		
 	return 0
