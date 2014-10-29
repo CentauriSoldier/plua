@@ -1,7 +1,7 @@
 --[[
-> automated argument assessment 
+> Automated Argument Assessment 
 > Original Concept By MicroByte for AutoPlay Media Studio
-> Revised and Maintained for Lua by Centauri Soldier
+> Revised, Maintained and Updated for Lua by Centauri Soldier
 > Concept and Code By Centauri Soldier
 > http://www.github.com/CentauriSoldier/LuaPlugs
 > Version 3.2
@@ -9,6 +9,28 @@
 > This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
 > To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/
 > or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+>
+> This module is intended for developers who need the ability to properly and accurately track errors that
+> may occur. By adding this code to your functions, you can trace back your errors to the specific function
+> that generates them.
+>
+> Example Usage:
+> --a function that would normally look like this
+>
+> function myFunction(nNumber, sString, tTable, vMaybeNil)
+>
+> will change to look like this
+>
+> function myFunction(...)
+> aaa.checkNumArgs(arg, 3); --If the value of an argument can be nil, it must be placed at the end of the list
+>                           --since they will not count toward the total number of arguments if set to nil.
+> local nNumber = aaa.checkTypes(arg, 1, {"number"});
+> local sString = aaa.checkTypes(arg, 1, {"string"});
+> local tTable = aaa.checkTypes(arg, 1, {"table"});
+> local vNumberOrString = aaa.checkTypes(arg, 1, {"number","string"});
+> local vAnyValue = aaa.checkTypes(arg, 1, {"boolean","number","string","table","userdata","nil"});
+> --your function's code here
+> end
 --]]
 aaa = {};
 local t_errors = {};
@@ -37,9 +59,9 @@ and should be placed after all other function arguments.
 function aaa.checkNumArgs(t_args, n_args)
 local n_count = table.getn(t_args);
 
-if n_count < n_args then
-error(n_args.." Arguments expected, "..n_count.." Arguments passed.",3);
-end
+	if n_count < n_args then
+	error(n_args.." Arguments expected, "..n_count.." Arguments passed.",3);
+	end
 	
 end
 
@@ -57,23 +79,24 @@ local b_ret = true;
 local n_types = #t_varTypes;
 local n_strikes = 0;
 
-for n_index, s_item in pairs(t_table) do
-n_strikes = 0;
+	for n_index, s_item in pairs(t_table) do
+	n_strikes = 0;
 
-	for n_type, s_type in pairs(t_varTypes) do
+		for n_type, s_type in pairs(t_varTypes) do
 
-		if type(s_item) ~= s_type then
-		n_strikes = n_strikes + 1;
+			if type(s_item) ~= s_type then
+			n_strikes = n_strikes + 1;
+			end
+				
 		end
-			
+		
+		if n_strikes >= n_types then
+		b_ret = false;
+		break;
+		end
+
 	end
 	
-	if n_strikes >= n_types then
-	b_ret = false;
-	break;
-	end
-
-end
 return b_ret
 end
 
