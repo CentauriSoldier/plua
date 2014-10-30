@@ -22,13 +22,13 @@
 > will change to look like this
 >
 > function myFunction(...)
-> aaa.checkNumArgs(arg, 3); --If the value of an argument can be nil, it must be placed at the end of the list
->                           --since they will not count toward the total number of arguments if set to nil.
+> aaa.checkNumArgs(arg, 4); -Minimum number of arguments
 > local nNumber = aaa.checkTypes(arg, 1, {"number"});
 > local sString = aaa.checkTypes(arg, 1, {"string"});
 > local tTable = aaa.checkTypes(arg, 1, {"table"});
 > local vNumberOrString = aaa.checkTypes(arg, 1, {"number","string"});
-> local vAnyValue = aaa.checkTypes(arg, 1, {"boolean","number","string","table","userdata","nil"});
+> local vAnyValue = aaa.checkTypes(arg, 1, {"boolean","number","string","table","userdata","nil"}); --If the value of an argument can be nil, it must be placed at the end of the list
+>                           																														   --since they will not count toward the total number of arguments if set to nil.
 > --your function's code here
 > end
 --]]
@@ -44,6 +44,36 @@ Sets a global error message in the runtime engine.
 ]]
 function aaa.setGlobalErrorMessage(n_code, s_message)
 t_errors[n_code] = s_message;
+end
+
+
+
+--[[************===***********->
+		aaa.getGlobalErrorMessage
+<-**************===*********<<
+Gets a global error message in the runtime engine.
+]]
+function aaa.getGlobalErrorMessage(n_code)
+	
+	if t_errors[n_code] then
+	return t_errors[n_code]
+	end
+	
+	return ""
+	
+end
+
+
+
+--[[************===***********->
+		aaa.getGlobalErrorMessages
+<-**************===*********<<
+Gets a global error message in the runtime engine.
+]]
+function aaa.getGlobalErrorMessages()
+	
+	return t_errors
+		
 end
 
 

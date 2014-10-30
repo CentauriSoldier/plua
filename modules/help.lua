@@ -370,7 +370,7 @@ end
 
 
 
-function help.GetImagePath(s_topic)
+function help.getImagePath(s_topic)
 local s_ret = "";
 
 	if t_topics[s_topic] then
@@ -382,7 +382,7 @@ end
 
 
 
-function help.GetKeywords(s_topic)
+function help.getKeywords(s_topic)
 
 	if t_topics[s_topic] then
 	return t_topics[s_topic].keywords
@@ -393,7 +393,7 @@ end
 
 
 
-function help.GetParent(s_topic)
+function help.getParent(s_topic)
 
 	if t_topics[s_topic] then
 	return t_topics[s_topic].parent
@@ -404,7 +404,7 @@ end
 
 
 
-function help.GetTopicCount()
+function help.getTopicCount()
 return #t_topics
 end
 
@@ -465,7 +465,7 @@ end
 
 
 
-function help.ImportTable(...)
+function help.importTable(...)
 aaa.checkNumArgs({...}, 1);
 local t_table = aaa.checkTypes({...},1,{"table"});
 local b_importExisting = aaa.checkTypes({...},2,{"boolean","nil"});
@@ -510,7 +510,7 @@ end
 
 
 
-function help.SetImagePath(...)
+function help.setImagePath(...)
 aaa.checkNumArgs({...}, 2);
 local s_topic = aaa.checkTypes({...},1,{"string"});
 local pImagePath = aaa.checkTypes({...},2,{"string"});
@@ -525,7 +525,7 @@ end
 
 
 
-function help.SetKeywords(...)
+function help.setKeywords(...)
 aaa.checkNumArgs({...}, 2);
 local s_topic = aaa.checkTypes({...},1,{"string"});
 local t_keywords = aaa.checkTypes({...},2,{"table"});
@@ -545,7 +545,7 @@ end
 
 
 
-function help.SetParent(...)
+function help.setParent(...)
 aaa.checkNumArgs({...}, 2);
 local s_topic = aaa.checkTypes({...},1,{"string"});
 local s_parent = aaa.checkTypes({...},2,{"string","userdata"});
@@ -576,7 +576,7 @@ end
 
 
 
-function help.TopicExists(...)
+function help.topicExists(...)
 aaa.checkNumArgs({...}, 1);
 local s_topic = aaa.checkTypes({...},1,{"string"});
 
