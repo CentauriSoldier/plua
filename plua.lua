@@ -11,7 +11,7 @@
 
 plua = {};
 local t_plua = {
-	autoCallInit = false,
+	autoCallInit = true,
 	libs = {
 		[1] = {
 			active = true,
@@ -29,8 +29,8 @@ local t_plua = {
 			requiresLuax = true,
 		},	
 	},
-	luaxPath = "",
-	path = "",
+	luaxPath = "../luax",
+	path = "modules",
 };
 
 
